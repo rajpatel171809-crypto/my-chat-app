@@ -20,12 +20,12 @@
             <input type="text" id="phone" placeholder="+918200630050" style="width: 80%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
             <br>
             <button onclick="sendOTP()" id="otp-btn" style="background: #075e54; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Get OTP</button>
-            <div id="recaptcha-container" style="margin-top: 20px;"></div>
+            <div id="recaptcha-container" style="margin-top: 20px; display: flex; justify-content: center;"></div>
         </div>
     </div>
 
     <script>
-        // 1. Firebase Configuration
+        // 1. Firebase Configuration (Aapka sahi wala data)
         const firebaseConfig = {
             apiKey: "AIzaSyDrffEKvbZZ2F6RbQisfZTLhY5EWL6CMeU",
             authDomain: "chet-for-friends.firebaseapp.com",
@@ -34,4 +34,52 @@
             messagingSenderId: "939963245688",
             appId: "1:939963245688:web:03b0448694462f6e89b98d",
             measurementId: "G-N1DH62BPJ8"
+        };
+
+        // 2. Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        // 3. OTP Function with reCAPTCHA
+        function sendOTP() {
+            const phoneNumber = document.getElementById('phone').value;
+
+            if (!phoneNumber.startsWith('+')) {
+                alert('Dhyan dein: Number +91 se shuru karein!');
+                return;
+            }
             
+            // reCAPTCHA ko load karna
+            if (!window.recaptchaVerifier) {
+                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                    'size': 'normal',
+                    'callback': (response) => {
+                        console.log("reCAPTCHA solved!");
+                    }
+                });
+            }
+
+            // OTP bhejna
+            firebase.auth().signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+                .then((confirmationResult) => {
+                    const code = prompt('Enter 6-digit OTP:');
+                    if (code) {
+                        return confirmationResult.confirm(code);
+                    }
+                })
+                .then((result) => {
+                    alert('Success! Aap login ho gaye hain.');
+                })
+                .catch((error) => {
+                    alert('Galti: ' + error.message);
+                    if (window.recaptchaVerifier) {
+                        window.recaptchaVerifier.render().then(widgetId => {
+                            grecaptcha.reset(widgetId);
+                        });
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
