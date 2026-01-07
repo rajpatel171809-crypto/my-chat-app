@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chet For Friends</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body style="font-family: sans-serif; background: #ece5dd; text-align: center; margin: 0;">
+    <div id="login-container" style="padding-top: 100px;">
+        <h2 style="color: #075e54;">Chet For Friends</h2>
+        <input type="text" id="phone" value="+918200630050" style="padding: 12px; width: 80%; border-radius: 8px; border: 1px solid #ccc;">
+        <br><br>
+        <div id="recaptcha-container"></div>
+        <button id="get-otp-btn" onclick="sendOTP()" style="background: #075e54; color: white; padding: 12px 25px; border: none; border-radius: 8px;">Get OTP</button>
+    </div>
+    <div id="chat-container" style="display: none; padding: 20px;">
+        <div style="background: #075e54; color: white; padding: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+            <div><b>Raj Admin</b></div>
+            <button onclick="window.location.href='tel:+919104363005'" style="background: #25d366; border: none; border-radius: 50%; width: 40px; height: 40px; color: white;">📞</button>
+        </div>
+        <p>Aapka App Live Hai!</p>
+    </div>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDrffEKvbZZ2F6RbQisfZTLhY5EWL6CMeU",
+            authDomain: "chet-for-friends.firebaseapp.com",
+            projectId: "chet-for-friends",
+            storageBucket: "chet-for-friends.appspot.com",
+            messagingSenderId: "939963245688",
+            appId: "1:939963245688:web:03b0448694462f6e89b98d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        function sendOTP() {
+            if (!window.recaptchaVerifier) {
+                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' });
+            }
+            const phoneNumber = document.getElementById('phone').value;
+            firebase.auth().signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+                .then((res) => {
+                    const code = prompt("OTP (Test: 123456):");
+                    if (code) return res.confirm(code);
+                })
+                .then(() => {
+                    document.getElementById('login-container').style.display = 'none';
+                    document.getElementById('chat-container').style.display = 'block';
+                })
+                .catch((err) => { alert("Galti: " + err.message); });
+        }
+    </script>
+</body>
+</html>
