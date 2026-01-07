@@ -1,73 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chet For Friends</title>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
-<body style="font-family: sans-serif; background: #ece5dd; text-align: center; margin: 0;">
-    <div id="login-container" style="padding-top: 100px;">
-        <h2 style="color: #075e54;">Chet For Friends</h2>
-        <input type="text" id="phone" value="+918200630050" style="padding: 12px; width: 80%; border-radius: 8px; border: 1px solid #ccc;">
-        <br><br>
-        <div id="recaptcha-container"></div>
-        <button id="get-otp-btn" onclick="sendOTP()" style="background: #075e54; color: white; padding: 12px 25px; border: none; border-radius: 8px;">Get OTP</button>
-    </div>
-    <div id="chat-container" style="display: none; padding: 20px;">
-        <div style="background: #075e54; color: white; padding: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
-            <div><b>Raj Admin</b></div>
-            <button onclick="window.location.href='tel:+919104363005'" style="background: #25d366; border: none; border-radius: 50%; width: 40px; height: 40px; color: white;">📞</button>
-        </div>
-        <p>Aapka App Live Hai!</p>
-    </div>
-    <script>
-         const firebaseConfig = {
-              apiKey: "AIzaSyDrffEKvbZZ2F6RbQisf2TLhY5EWt6CMeU",
-  authDomain: "chet-for-friends.firebaseapp.com",
-  projectId: "chet-for-friends",
-  storageBucket: "chet-for-friends.firebasestorage.app",
-  messagingSenderId: "939963245688",
-  appId: "1:939963245688:web:03b0448e94462f6e89b98d",
-  measurementId: "G-N1DH62BPJ8"
-};
-        
-            
-        
-        firebase.initializeApp(firebaseConfig);
-        function sendOTP() {
-            if (!window.recaptchaVerifier) {
-                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' });
-            }
-            const phoneNumber = document.getElementById('phone').value;
-            firebase.auth().signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
-                .then((res) => {
-                    const code = prompt("OTP (Test: 123456):");
-                    if (code) return res.confirm(code);
-                })
-                .then(() => {
-                    document.getElementById('login-container').style.display = 'none';
-                    document.getElementById('chat-container').style.display = 'block';
-                })
-                .catch((err) => { alert("Galti: " + err.message); });
-        }
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<body style="background-color: #f0ede5; font-family: sans-serif; margin: 0; padding: 0;">
 
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyDrffEKvbZZ2F6RbQisfZTLhY5EWL6CMeU",
-        authDomain: "chet-for-friends.firebaseapp.com",
-        projectId: "chet-for-friends",
-        storageBucket: "chet-for-friends.appspot.com",
-        messagingSenderId: "939963245688",
-        appId: "1:939963245688:web:03b0448694462f6e89b98d",
-        measurementId: "G-N1DH62BPJ8"
-    };
-    firebase.initializeApp(firebaseConfig);
-    // ... baaki ka code
-</script>
-</script>
-</body>
-</html>
+    <div id="chat-container" style="max-width: 500px; margin: auto;">
+        <div style="background: #075e54; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between;">
+            <div><b>Raj Admin</b></div>
+            <button onclick="window.location.reload()" style="background: #25d366; border: none; border-radius: 50%; width: 40px; height: 40px; color: white; cursor: pointer;">📞</button>
+        </div>
+        
+        <div style="text-align: center; padding: 20px;">
+            <p>Aapka App Live Hai!</p>
+            <input type="text" id="phone" placeholder="+918200630050" style="width: 80%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            <br>
+            <button onclick="sendOTP()" id="otp-btn" style="background: #075e54; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Get OTP</button>
+            <div id="recaptcha-container" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDrffEKvbZZ2F6RbQisfZTLhY5EWL6CMeU",
+            authDomain: "chet-for-friends.firebaseapp.com",
+            projectId: "chet-for-friends",
+            storageBucket: "chet-for-friends.appspot.com",
+            messagingSenderId: "939963245688",
+            appId: "1:939963245688:web:03b0448694462f6e89b98d",
+            measurementId: "G-N1DH62BPJ8"
+            
